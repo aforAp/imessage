@@ -5,6 +5,7 @@ import { connectDB } from "./lib/db.js";
 import {clerkMiddleware} from "@clerk/express";
 import fs from "fs";
 import path from "path";
+import cors from "cors";
 /*****CORS */
 /* cros origin resource sharing
  when a website tried to get from the anotehr website the browser might block for the security reason
