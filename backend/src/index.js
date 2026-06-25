@@ -7,6 +7,7 @@ import fs from "fs";
 import path from "path";
 import cors from "cors";
 import job from "./lib/cron.js";
+import clerkWebhook from "./webhooks/clerk.webhook.js";
 /*****CORS */
 /* cros origin resource sharing
  when a website tried to get from the anotehr website the browser might block for the security reason
@@ -21,6 +22,11 @@ const FRONTEND_URL = process.env.FRONTEDN_URL;
 connectDB();
 const publicDir = path.join(process.cwd(), "public");
 
+//its important that you dont parse the webhook event data, it should be in the raw format
+app.use("/api/webhooks/clerk", express.raw({
+    type: "application/json"
+}), 
+clerkWebhook);
 
 app.use(express.json()); //helps to parse the json data
 app.use(cors({origin: FRONTEND_URL, credentials: true})); 
