@@ -3,7 +3,8 @@ import express from "express";
 import "dotenv/config";
 import { connectDB } from "./lib/db.js";
 import {clerkMiddleware} from "@clerk/express";
-
+import fs from "fs";
+import path from "path";
 /*****CORS */
 /* cros origin resource sharing
  when a website tried to get from the anotehr website the browser might block for the security reason
@@ -16,6 +17,8 @@ console.log("DB URL=", process.env.DB_URL);
 const PORT = process.env.PORT;
 const FRONTEND_URL = process.env.FRONTEDN_URL;
 connectDB();
+const publicDir = path.join(process.cwd(), "public");
+
 
 app.use(express.json()); //helps to parse the json data
 app.use(cors({origin: FRONTEND_URL, credentials: true})); 
@@ -29,5 +32,13 @@ app.get("/health", (req, res) => {
         ok: true
     });
 })
+
+if(fs.existsSync(publicDir)) {
+
+    app.use(express.static(publicDir));
+     app.get("/{*any}", (req, res,next) => {
+        res.sendFile(path.join(publicDir, "index.html"), (err) => next(err));
+     })
+}
 app.listen(PORT, () =>{
     console.log("Server is up and running on port", PORT)});
