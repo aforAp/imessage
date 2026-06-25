@@ -6,6 +6,7 @@ import {clerkMiddleware} from "@clerk/express";
 import fs from "fs";
 import path from "path";
 import cors from "cors";
+import job from "./lib/cron.js";
 /*****CORS */
 /* cros origin resource sharing
  when a website tried to get from the anotehr website the browser might block for the security reason
@@ -42,4 +43,7 @@ if(fs.existsSync(publicDir)) {
      })
 }
 app.listen(PORT, () =>{
-    console.log("Server is up and running on port", PORT)});
+    console.log("Server is up and running on port", PORT);
+if (process.env.NODE_ENV === "production") 
+    job.start();
+});
