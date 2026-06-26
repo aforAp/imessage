@@ -8,6 +8,7 @@ import path from "path";
 import cors from "cors";
 import job from "./lib/cron.js";
 import clerkWebhook from "./webhooks/clerk.webhook.js";
+import authRoutes from "./routes/auth.route.js";
 /*****CORS */
 /* cros origin resource sharing
  when a website tried to get from the anotehr website the browser might block for the security reason
@@ -40,6 +41,8 @@ app.get("/health", (req, res) => {
         ok: true
     });
 })
+
+app.use('/api/auth', authRoutes);
 
 if(fs.existsSync(publicDir)) {
 
