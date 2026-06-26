@@ -9,6 +9,7 @@ import cors from "cors";
 import job from "./lib/cron.js";
 import clerkWebhook from "./webhooks/clerk.webhook.js";
 import authRoutes from "./routes/auth.route.js";
+import messageRoutes from "./routes/messages.route.js";
 /*****CORS */
 /* cros origin resource sharing
  when a website tried to get from the anotehr website the browser might block for the security reason
@@ -43,7 +44,7 @@ app.get("/health", (req, res) => {
 })
 
 app.use('/api/auth', authRoutes);
-
+app.use('/api/messages', messageRoutes);
 if(fs.existsSync(publicDir)) {
 
     app.use(express.static(publicDir));
