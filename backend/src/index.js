@@ -10,13 +10,13 @@ import job from "./lib/cron.js";
 import clerkWebhook from "./webhooks/clerk.webhook.js";
 import authRoutes from "./routes/auth.route.js";
 import messageRoutes from "./routes/messages.route.js";
+import {app, server} from "./lib/socket.io.js";
 /*****CORS */
 /* cros origin resource sharing
  when a website tried to get from the anotehr website the browser might block for the security reason
  it helps for the broswer security rules.
 */
 
-const app = express();
 
 console.log("DB URL=", process.env.DB_URL);
 const PORT = process.env.PORT;
@@ -52,7 +52,7 @@ if(fs.existsSync(publicDir)) {
         res.sendFile(path.join(publicDir, "index.html"), (err) => next(err));
      })
 }
-app.listen(PORT, () =>{
+server.listen(PORT, () =>{
     console.log("Server is up and running on port", PORT);
 if (process.env.NODE_ENV === "production") 
     job.start();

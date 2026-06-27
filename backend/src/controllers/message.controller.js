@@ -1,4 +1,5 @@
 import { hasImageKitConfig, uploadChatMedia } from "../lib/imageKit.js";
+import { getReceiverSocketId, io } from "../lib/socket.io.js";
 import { upload } from "../middleWare/upload.middleware.js";
 import Message from "../models/message.model.js";
 import User from "../models/user.model.js";
@@ -102,7 +103,11 @@ export async function sendMessage(req, res) {
        //tood: realtime with socket.io
        //why socket.io when you are willing to see the realtime data need to reload the application
        //to avoid that we are going to use the socket.io
-
+const receiverSocketId = getReceiverSocketId(receiverId);
+//only send the message in realtime if user is online
+if(receiverSocketId) {
+    io.to(receiverSocketId).emit("newMessage", newMessage);
+}
        res.status(201).json(newMessage);
     } catch(error) {
 console.error("Error in sendMessage", error.message);
